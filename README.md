@@ -1,81 +1,102 @@
+JediTerm
+========
 
-VWorkflows
-==============
+[![official JetBrains project](http://jb.gg/badges/official.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 
-[![Build Status](https://travis-ci.org/miho/VWorkflows.svg?branch=master)](https://travis-ci.org/miho/VWorkflows) 
-<a href="https://foojay.io/today/works-with-openjdk">
-   <img align="right" 
-        src="https://github.com/foojayio/badges/raw/main/works_with_openjdk/Works-with-OpenJDK.png"   
-        width="100">
-</a>
+[![Build Status](https://travis-ci.org/JetBrains/jediterm.png?branch=master)](https://travis-ci.org/JetBrains/jediterm)
 
-<br>
 
-Interactive flow/graph visualization for building domain specific visual programming environments. Provides UI bindings for JavaFX.
+The main purpose of the project is to provide a pure Java terminal widget that can be easily embedded 
+into an IDE.
+It supports terminal sessions both for SSH connections and local PTY on Mac OSX, Linux and Windows.
 
-<img src="https://farm2.staticflickr.com/1453/26419281842_799e5d458a_k.jpg">
 
-<img src="https://farm2.staticflickr.com/1445/26511687665_051a5bf7d9_k.jpg">
+The library is used by JetBrains IDEs like PyCharm, IDEA, PhpStorm, WebStorm, AppCode, CLion, and Rider.
 
-See [http://mihosoft.eu/?p=523](http://mihosoft.eu/?p=523) and [http://mihosoft.eu/?p=564](http://mihosoft.eu/?p=564) 
-for an introduction.
+Since version 2.5 there is a standalone version of the JediTerm terminal, provided as Mac OSX distribution.
 
-Join the [Developer Group](https://groups.google.com/forum/#!forum/vrl-developers) if you'd like to contribute.
 
-## Maven Coordinates
+The name JediTerm origins from J(from `Java`) + edi(reversed `IDE`) + Term(obviously from `terminal`).
+Also the word Jedi itself gives some confidence and hope in the Universe of thousands of different terminal implementations.
 
-VWorkflows-Core:
 
-[![Javadocs](https://www.javadoc.io/badge/eu.mihosoft.vrl.workflow/vworkflows-core.svg?label=javadoc-core)](https://www.javadoc.io/doc/eu.mihosoft.vrl.workflow/vworkflows-core)
+Run
+-------
+
+To run the standalone JediTerm terminal from sources just execute _jediterm.sh_ or _jediterm.bat_.
+Or use the binary distribution from the [Releases](https://github.com/JetBrains/jediterm/releases/) page.
 
 
 
+Build
+-----
 
-    <dependency>
-      <groupId>eu.mihosoft.vrl.workflow</groupId>
-      <artifactId>vworkflows-core</artifactId>
-      <version>0.2.3</version>
-    </dependency>
+Gradle is used to build this project. The project consists of 4 sub-projects:
+* **terminal**
 
-VWorkflows-FX:
+    The core library that provides VT100 compatible terminal emulator and Java Swing based implementation of terminal panel UI.
 
-[![Javadocs](https://www.javadoc.io/badge/eu.mihosoft.vrl.workflow/vworkflows-fx.svg?label=javadoc-fx)](https://www.javadoc.io/doc/eu.mihosoft.vrl.workflow/vworkflows-fx)
+* **ssh**
+
+    The jediterm-ssh.jar library that provides, using the Jsch library, a terminal for remote SSH terminal sessions.
+
+* **pty**
+
+    The jediterm-pty.jar library that, by using the [Pty4J](https://github.com/traff/pty4j) library, enables a terminal for local PTY terminal sessions.
+
+* **JediTerm**
+
+    The standalone version of the JediTerm terminal distributed as a .dmg for Mac OSX.
 
 
-Replace version with the desired version (see above for latest version).
+Features
+--------
+* Ssh using JSch from jcraft.org
+* Local terminal for Unix, Mac and Windows using [Pty4J](https://github.com/traff/pty4j)
+* Xterm emulation - passes most of tests from vttest
+* Xterm 256 colours
+* Scrolling
+* Copy/Paste
+* Mouse support
+* Terminal resizing from client or server side
+* Terminal tabs
 
-    <dependency>
-      <groupId>eu.mihosoft.vrl.workflow</groupId>
-      <artifactId>vworkflows-fx</artifactId>
-      <version>0.2.3</version>
-    </dependency>
 
-## How To Build
 
-### Reqirements
+Authors
+-------
+Dmitry Trofimov <dmitry.trofimov@jetbrains.com>, Clément Poulain
 
-- Java >= 1.8.0_60
-- Internet connection (other dependencies are downloaded automatically)
-- IDE: [Gradle](http://www.gradle.org/) Plugin (not necessary for command line usage)
 
-### IDE
 
-Open the `VWorkflows` [Gradle](http://www.gradle.org/) project in your favourite IDE (tested with NetBeans 8.1) and build it
-by calling the `assemble` task.
+Links
+-----
+ * Terminal protocol description: http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
+ * Terminal Character Set Terminology and Mechanics: http://www.columbia.edu/kermit/k95manual/iso2022.html
+ * VT420 Programmer Reference Manual: http://manx.classiccmp.org/collections/mds-199909/cd3/term/vt420rm2.pdf
+ * Pty4J library: https://github.com/traff/pty4j
+ * JSch library: http://www.jcraft.com/jsch
+ * UTF8 Demo: http://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-demo.txt
+ * Control sequences visualization: http://www.gnu.org/software/teseq/
+ * Terminal protocol tests: http://invisible-island.net/vttest/
 
-### Command Line
 
-Navigate to the [Gradle](http://www.gradle.org/) project (e.g., `path/to/VWorkflows`) and enter the following command
 
-#### Bash (Linux/OS X/Cygwin/other Unix-like OS)
+Open Source Origin and History
+------
+The initial version of the JediTerm was a reworked terminal emulator Gritty, which was in it's own turn a reworked JCTerm 
+terminal implementation. Now there is nothing in the source code left from Gritty and JCTerm. Everything was 
+rewritten from scratch. A lot of new features were added.
 
-    ./gradlew assemble
-    
-#### Windows (CMD)
+Character sets designation and mapping implementation is based on
+respective classes from jVT220 (https://github.com/jawi/jVT220, Apache 2.0 licensed) by J.W. Janssen.
 
-    gradlew assemble
-    
-## Test It
 
-Besides the tests defined in `VWorkflows-Core` (`test` task) it is also possible to run a graphical demo that comes with 
-`VWorkflows-Demo` subproject. To run it call the `run` task.
+Standalone distribution relies heavily on customized Swing UI widgets taken from IntelliJ Community platform repository
+(https://github.com/JetBrains/intellij-community) by JetBrains.
+
+
+Licenses
+-------
+JediTerm is dual-licensed under both the LGPLv3 (found in the LICENSE-LGPLv3.txt file in the root directory) and Apache 2.0 License (found in the LICENSE-APACHE-2.0.txt file in the root directory). 
+You may select, at your option, one of the above-listed licenses.
