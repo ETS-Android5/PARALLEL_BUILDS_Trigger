@@ -1,16 +1,39 @@
-# jgeohash .travis.yml
-
-language: java
+# travis build for #toGoZip (https://github.com/k3b/ToGoZip/)
+language: android
 
 jdk:
-    - openjdk8
+  - oraclejdk8
 
-notifications:
-    email:
-        recipients:
-            - asterios.raptis@web.de
-        on_failure: always
+addons:
+  apt:
+    packages:
+# graphviz to render javadoc uml
+# https://docs.travis-ci.com/user/multi-os/
+      - graphviz
 
-after_success:
-  - if [ -e ./gradlew ]; then ./gradlew jacocoTestReport;else gradle jacocoTestReport;fi
-  - bash <(curl -s https://codecov.io/bash)
+android:
+  components:
+    # https://github.com/travis-ci/travis-ci/issues/5036
+    - tools
+
+    # values in gradle.properties and .travis must be the same
+    - android-29
+
+    - add-on
+    - extra
+
+before_install:
+# http://stackoverflow.com/questions/33820638/travis-yml-gradlew-permission-denied
+# must execute
+# git update-index --chmod=+x gradlew
+# instead of 
+# - chmod +x gradlew
+#
+# https://stackoverflow.com/questions/52274229/travis-ci-android-28-licenses-have-not-been-accepted
+# - yes | sdkmanager "platforms;android-28"
+
+  - yes | sdkmanager "platforms;android-23"
+
+script:
+  - jdk_switcher use oraclejdk8
+  - ./gradlew assemble  libK3b:test libK3bZip:test

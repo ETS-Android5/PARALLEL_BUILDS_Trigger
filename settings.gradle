@@ -1,4 +1,3 @@
+// startParameter.offline=true
 
-rootProject.name = 'jgeohash'
-include(':jgeohash-geoip')
-include(':jgeohash-core')
+include ':app', ':libK3bZip', ':libK3b', ':libK3bAndroidZip'
