@@ -1,7 +1,6 @@
-rootProject.name='denominator'
+rootProject.name = 'petstore'
 
-include 'model', 'core', 'route53', 'ultradns', 'dynect', 'clouddns', 'designate', 'cli'
-
-rootProject.children.each { childProject ->
-    childProject.name = 'denominator-' + childProject.name
-}
+include 'domain'
+include 'persistence'
+include 'webapp'
+include 'server'
