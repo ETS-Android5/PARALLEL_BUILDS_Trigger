@@ -1,39 +1,21 @@
-sudo: false
 language: android
-jdk: oraclejdk7
-env:
-  matrix:
-  - ANDROID_TARGET=android-15
-  - ANDROID_TARGET=android-16
-  - ANDROID_TARGET=android-17
-  - ANDROID_TARGET=android-18
-  - ANDROID_TARGET=android-19
-  - ANDROID_TARGET=android-21
-
+sudo: false
+jdk: openjdk7
 android:
   components:
-    - build-tools-19.1.0
-    - android-15
-    - android-16
-    - android-17
-    - android-18
-    - android-19
-    - android-21
-    - sys-img-armeabi-v7a-android-15
-    - sys-img-armeabi-v7a-android-16
-    - sys-img-armeabi-v7a-android-17
-    - sys-img-armeabi-v7a-android-18
-    - sys-img-armeabi-v7a-android-19
-    - sys-img-armeabi-v7a-android-21
+    - tools
+    - build-tools-23.0.2
     - extra-android-support
     - extra-android-m2repository
-    - extra-google-m2repository
+    - android-23
+script:
+  - ./gradlew assembledebug  
 
-before_script:
-  # Create and start an emulator
-  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi armeabi-v7a
-  - emulator -avd test -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
-
-script: ./gradlew :ProviGenTests:connectedAndroidTest
+deploy:
+    provider: releases
+    skip_cleanup: true
+    api_key: "Wk41dTj7MJTw1bZA3xYMY4Bc1AbTg+x0y3B61ncCl0R60JKF0JTSEbRWssaoKl03nME1wSkQqUEH/4ytFXlr/7hFuOqluG0GnA3RzJEcjlA4KlbVpvLwtkG1jAN+88vu5nHTYQfZmAdryp3RsdjJXbUeIdH/Zg6cS6wJ4U7FYCM="
+    file:  "app/build/outputs/apk/app-debug.apk"
+    on:
+      repo: grzegorznittner/chanu
+      tags: true
