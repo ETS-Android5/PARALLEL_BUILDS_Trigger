@@ -1,23 +1,20 @@
-// Sub projects may reference rootProject.version
-version = '3.3.0'
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-wrapper {
-    distributionType = Wrapper.DistributionType.ALL
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.2'
+    }
 }
 
-ext {
-    compileSdkVersion = 29
-
-    minSdkVersion = 7
-    targetSdkVersion = 25
-
-    // common dependencies for Android projects (not to be used in example projects for better copy and paste)
-    dep = [
-            androidPlugin: 'com.android.tools.build:gradle:3.5.3',
-
-            // Used only in tests, should point to the latest *published* version (not relevant to publishing)
-            greendaoPlugin: 'org.greenrobot:greendao-gradle-plugin:3.3.0'
-    ]
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
 }
 
 if (JavaVersion.current().isJava8Compatible()) {
@@ -25,13 +22,5 @@ if (JavaVersion.current().isJava8Compatible()) {
         tasks.withType(Javadoc) {
             options.addStringOption('Xdoclint:none', '-quiet')
         }
-    }
-}
-
-subprojects {
-    repositories {
-        mavenCentral()
-        jcenter()
-        google()
     }
 }
