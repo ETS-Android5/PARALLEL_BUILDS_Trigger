@@ -1,63 +1,39 @@
-# Just to try and prevent some noob disasters.
-# Use git add -f foo.jar to ignore this ignore list
+# built application files
+*.apk
+*.ap_
 
-# generated release files
-*.exe
-*.[gx]z
-*.bz2
-*.[rwjt]ar
-*.sig
-*.su[d23]
-*.deb
-*.zip
-*.torrent
+# files for the dex VM
+*.dex
 
-*~
-web-fragment.xml
-web-out.xml
-*.out
-
-# Temporary/build dirs
-build/
-pkg-temp/
-classes/
-dist/
-/installer/resources/locale/mo
-/tmp
-/apps/jetty/jettylib
-*_jsp.java
+# Java class files
 *.class
 
-# Debian-related
-/debian/copyright
-/debian/changelog
-.pc/
+# generated files
+bin/
+gen/
 
-# Build property overrides
-/override.properties
+# Local configuration file (sdk path, etc)
+local.properties
 
-# Reporting
-*.fba
-sloccount.sc
-/reports/
-
-# Don't allow patches
-*.(diff|patch)
-
-# but allow debian/patches
-!/debian/patches/*.(patch|diff)
-
-# IDE project files
-# Eclipse
-.classpath
-.project
-.settings/
-# IDEA
+# Intellij project files
 *.iml
-.idea
+*.ipr
+*.iws
+.idea/
 
-# Gradle
+# NDK build artifacts for sdk-native 
+sdk-native/src/cpp_precompilation/libs 
+sdk-native/src/cpp_precompilation/obj
+
+# Other
+
 .gradle
-
-# TODO: why does this file appear?
-apps/routerconsole/jsp/favicon.ico
+.DS_Store
+/build
+sdknative/build/generated/
+sdknative/build/
+app-native/.externalNativeBuild/cmake/debug/
+app-native/.externalNativeBuild/cmake/release/
+upload-plugin/build/pluginUnderTestMetadata/plugin-under-test-metadata.properties
+upload-plugin/build/
+app-native/.cxx/
