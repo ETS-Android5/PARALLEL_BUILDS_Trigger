@@ -1,29 +1,52 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+    ext.kotlin_version = '1.2.30'
     repositories {
         jcenter()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.0'
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        maven {
-            url "https://jitpack.io"
-        }
-
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 ext {
-    compileSdkVersion = 28
-    targetSdkVersion = 28
-    supportVersion = "28.+"
-    playServicesVersion = "16.0.1"
-    supportWearableVersion = "2.4.0"
+    ci = "true".equals(System.getenv("CI"))
+    preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
+
+    // Manifest version information!
+    versionMajor = 2
+    versionMinor = 0
+    versionPatch = 0
+    versionBuild = 1 // bump for dogfood builds, public betas, etc.
+
+    versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+    versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
+
+    compileSdkVersion = 27
+    buildToolsVersion = "27.0.3"
+    targetSdkVersion = 27
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+        maven {
+            url 'https://jitpack.io'
+        }
+
+    }
+
+    apply plugin: 'findbugs'
+    findbugs {
+        ignoreFailures = true
+    }
+
+    apply plugin: 'pmd'
+    pmd {
+        ignoreFailures = true
+    }
 }

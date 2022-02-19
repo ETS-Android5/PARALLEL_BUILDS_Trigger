@@ -1,13 +1,13 @@
 bin
 gen
 build-private.properties
-local.properties
-private.properties
-release
 build
-.gradle
 .idea
-*.iml
-*~
+.gradle
 .DS_Store
-*.p12
+*.iml
+local.properties
+
+#private files
+release.keystore
+service_account.json
