@@ -1,21 +1,26 @@
-out/
-bin/
-*/bin/
-.DS_Store
-.classpath
-.project
-.settings/
-*.ipr
-*.iml
-*.iws
-.metadata
-target
-test-output
-temp-testng*.xml
-build/
-gradle-app.setting
-.gradle
-.groovy
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Gedit temp files
 *~
-\#*
-/.metadata/
+
+# gradle files
+.gradle/
+.idea/
+build/
+gen/
+
+#app bundle files
+*.aab
+
+# Intellij files (Android Studio)
+*.iml
+
+# NetBeans IDE project files
+/.nb-gradle/private/
+
+# Release signing property file
+release.properties
+/mapbox.properties
+/runalyze.properties
+/dropbox.properties

@@ -1,36 +1,52 @@
-[<img src="http://tapestry.apache.org/images/tapestry.png" align="center"/>](http://tapestry.apache.org)
+RunnerUp
+========
 
-Tapestry is a component-oriented Java web app framework focusing on performance and developer productivity.
+[![Join the chat at https://gitter.im/jonasoreland/runnerup](https://badges.gitter.im/jonasoreland/runnerup.svg)](https://gitter.im/jonasoreland/runnerup?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/jonasoreland/runnerup.svg?branch=master)](https://travis-ci.org/jonasoreland/runnerup)
 
-A *component* is just a reusable part of a page. It's trivially easy to create your own components, and Tapestry
-comes with a large number of components you can use (Form, Loop, Select, Checkbox, Grid, BeanEditor, etc.).
+Track your sport activities with RunnerUp using the GPS in your Android phone.
 
-In Tapestry, each page and component is a simple Java POJO with a corresponding HTML template. The HTML template and corresponding Java class have the same name (e.g. "Breadcrumbs.html" and "Breadcrumbs.java"), so you don't have to tell Tapestry which template uses which Java class. It's automatic.
+## Features
 
-Tapestry features *live class reloading*: change your Java code, refresh the browser and see the changes instantly.
+* See detailed stats around your pace, distance and time
+* Get stats and progress with built-in highly configurable audio cues
+* Run free runs with target pace or target heart rate zone
+* Easily configure and run effective interval workouts modeled after Garmin
+* Automatic upload to various external applications such as Strava and Runalyze. Some also support download and feed updates ([see here for details](https://github.com/jonasoreland/runnerup/wiki/Synchronization-with-external-providers)).
+* Share your favorite workouts with friends (using email)
+* Heart rate monitor: Bluetooth SMART (BLE) and ANT+ (as well as PolarWearLink and Zephyr)
+* Configure and use heart rate zones
+* Phone internal sensors like step sensor and barometer.
+* WearOS app
+* Pebble support
 
-AJAX support allows you to create responsive web interfaces while writing little to no JavaScript. (But if you like
-writing JavaScript, great, no problem, Tapestry gets out of your way.)
+## Release
 
-## Quick Start
+* [Play Store](https://play.google.com/store/apps/details?id=org.runnerup) Join [beta group](https://play.google.com/apps/testing/org.runnerup) for early access.
+* [GitHub](https://github.com/jonasoreland/runnerup/releases) All releases, including alpha releases.
+* [F-Droid](https://f-droid.org/packages/org.runnerup.free/) This version does not contain some features due to licensing, see the F-Droid description.
 
-Main article: [Getting Started](https://tapestry.apache.org/getting-started.html)
+The current 2.x release support Android 4.0 and later. The Play release also supports Android 2.2, 2.3, but due to lack of test devices, RunnerUp cannot support Android 2.x. The "Froyo" version do not include graphs, maps and elevation GeoId correction.
 
-You can let Apache Maven create your initial project for you:
+## User information
 
-    mvn archetype:generate -DarchetypeCatalog=http://tapestry.apache.org
+Please read the [wiki](https://github.com/jonasoreland/runnerup/wiki), especially the [Manual](https://github.com/jonasoreland/runnerup/wiki/Overview)
 
-Maven will prompt you for the archetype to create ("Tapestry 5 Quickstart Project") and the exact version
-number (e.g., "5.4.3"). It also asks you for a group id, an artifact id, and a version number. Once Maven
-dowloads everything, then you can start the app:
+## Contributing
 
-    $ cd newapp
-    $ mvn jetty:run
+Patches, forks, pull requests, suggestions or harsh flame is welcome!
+Please read the [wiki](https://github.com/jonasoreland/runnerup/wiki).
 
-Then just send your browser to http://localhost:8080/newapp
+## Translations
+<a target="_blank" style="text-decoration:none; color:black; font-size:66%" href="https://www.transifex.com/projects/p/runner-up-android"
+title="See more information on Transifex.com"><img src="https://ds0k0en9abmn1.cloudfront.net/static/charts/images/tx-logo-micro.646b0065fce6.png" ></a>
 
-See the [Getting Started](http://tapestry.apache.org/getting-started.html) introduction as well as the [Tapestry Tutorial](http://tapestry.apache.org/tapestry-tutorial.html) for a deeper dive.
+Interested in helping to translate RunnerUp? Contribute [on Transifex](https://www.transifex.com/projects/p/runner-up-android).
 
-## Main Docs
+## License
+Unless otherwise stated, the code for this project is under GNU GPL v3. See [LICENSE](LICENSE) for more information.
 
-See https://tapestry.apache.org/documentation.html for the details on every Tapestry topic.
+Components licensed differently are listed on the [CREDITS](CREDITS.md) page.
+
+## Donations
+If your already donate to <a href="http://www.unhcr.org">UNHCR</a>, <a href="http://www.unicef.org/">UNICEF</a> and/or other important things, you might donate using paypal <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=runnerup%2eandroid%40gmail%2ecom&lc=US&item_name=RunnerUp&button_subtype=services&currency_code=EUR&tax_rate=25%2e000&bn=PP%2dBuyNowBF%3abtn_buynow_LG%2egif%3aNonHosted"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" alt="[paypal]" /></a>.
