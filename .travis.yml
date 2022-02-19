@@ -1,24 +1,16 @@
-language: java
+language: android
 dist: trusty
-jdk:
-  - oraclejdk8
-
-before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-
-cache:
-  directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
-
+jdk: openjdk8
+android:
+  components:
+    - build-tools-30.0.2
+    - android-23
+    - extra-android-m2repository
+    - extra-google-m2repository
+  licenses:
+    - '.+'
 before_install:
-
-install:
-
+  - chmod +x gradlew
+  - yes | sdkmanager "build-tools;30.0.2"
 script:
-  - ./gradlew test
-
-after_success:
-
-after_failure:
+  - ./gradlew check
