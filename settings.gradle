@@ -1,5 +1,2 @@
-include 'ui'
-include 'content'
-
-// === Sample ===
-//include 'sample-project'
+rootProject.name='turbine'
+include 'turbine-core', 'turbine-ext:turbine-discovery-eureka1', 'turbine-ext:turbine-discovery-eureka2'
