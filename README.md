@@ -1,31 +1,18 @@
-Archaius
-=====
-[![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/Netflix/archaius.svg)]()
+# OI Shopping List
 
-[![Build Status](https://netflixoss.ci.cloudbees.com/buildStatus/icon?job=archaius-master)](https://netflixoss.ci.cloudbees.com/job/archaius-master/)
+![logo](ShoppingList/src/main/res/drawable-hdpi-v5/ic_launcher_shoppinglist.png)
 
-Features
--------
+Free, ad-free, open source Android application in 40 languages since 2009.
 
-Archaius includes a set of configuration management APIs used by Netflix. It provides the following functionality:
+OI Shopping List is a powerful application which makes it easy to create and manage checklists for your daily shopping.
 
-* Dynamic, Typed Properties
-* High throughput and Thread Safe Configuration operations
-* A polling framework that allows obtaining property changes of a Configuration Source
-* A Callback mechanism that gets invoked on effective/"winning" property mutations (in the ordered hierarchy of Configurations)
-* A JMX MBean that can be accessed via JConsole to inspect and invoke operations on properties
-* Out of the box, Composite Configurations (With ordered hierarchy) for applications (and most web applications willing to use convention based property file locations)
-* Implementations of dynamic configuration sources for URLs, JDBC and Amazon DynamoDB
-* Scala dynamic property wrappers
+OI Shopping List makes it easy to add items to a list, check the item off, and remove it from the list.
+The application can track separate prices for each store that you use, and features a high level of customization.
+Font size, sort order, list columns, and list cleanup behavior are all settings controlled by the user.
+All of these features are brought together in a crisp layout that is customizable through a variety of themes.
 
-Documentation
---------------
-Please see [wiki](https://github.com/Netflix/archaius/wiki) for detail documentation.
+## Distribution Channels / App stores
 
-Origin
-------
-The code name for the project comes from an endangered species of Chameleons. We chose [Archaius](http://en.wikipedia.org/wiki/Archaius), as Chameleons are known for changing their color (a property) based on its environment and situation. This project was borne out of a strong desire to use dynamic property changes to effect runtime behaviors based on specific contexts.
+* **[F-Droid](https://f-droid.org/en/packages/org.openintents.shopping/)** [F-Droid meta data](https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/org.openintents.shopping.yml)
 
-User Group
-----------
-The google group for Archaius users is https://groups.google.com/forum/#!forum/achaius-users. Email address for the group is achaius-users@googlegroups.com.
+* **[Google Play](https://play.google.com/store/apps/details?id=org.openintents.shopping)**
