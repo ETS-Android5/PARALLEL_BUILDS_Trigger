@@ -1,27 +1,36 @@
-[![Build Status](https://travis-ci.org/Chorus-bdd/Chorus.svg?branch=master)](https://travis-ci.org/Chorus-bdd/Chorus)
+[<img src="http://tapestry.apache.org/images/tapestry.png" align="center"/>](http://tapestry.apache.org)
 
-### Chorus is a BDD test interpreter with extra capabilities for testing distributed architectures
+Tapestry is a component-oriented Java web app framework focusing on performance and developer productivity.
 
-Chorus is a versatile BDD (Behaviour Driven Development) testing interpreter
+A *component* is just a reusable part of a page. It's trivially easy to create your own components, and Tapestry
+comes with a large number of components you can use (Form, Loop, Select, Checkbox, Grid, BeanEditor, etc.).
 
-Conventional BDD tools require you to provide step definitions locally. 
-This is possible with Chorus too. 
- 
-However, the Chorus interpreter also allows you to publish step definitions over the network from your components or microservices under test.
-When the interpreter runs it can connect to your components, find the step definitons and execute them.  
+In Tapestry, each page and component is a simple Java POJO with a corresponding HTML template. The HTML template and corresponding Java class have the same name (e.g. "Breadcrumbs.html" and "Breadcrumbs.java"), so you don't have to tell Tapestry which template uses which Java class. It's automatic.
 
-Chorus supports both Java (JVM-based) and Javascript components (enabling a direct connection to test Web apps in the browser)
+Tapestry features *live class reloading*: change your Java code, refresh the browser and see the changes instantly.
 
-Chorus is ideal for integration testing systems with microservice-based architectures. 
+AJAX support allows you to create responsive web interfaces while writing little to no JavaScript. (But if you like
+writing JavaScript, great, no problem, Tapestry gets out of your way.)
 
-**Getting Started:**
+## Quick Start
 
-#### See [The Chorus Website](https://chorus-bdd.github.io) for documentation
-#### The [Issue Tracking](https://github.com/Chorus-bdd/Chorus/issues?state=open) page, for issue tracking!
+Main article: [Getting Started](https://tapestry.apache.org/getting-started.html)
 
-Chorus is available under the open source MIT license
+You can let Apache Maven create your initial project for you:
 
-Contacts:  
- * Nick - email nick (at) objectdefinitions.com  
- * or Steve - via http://www.smartkey.co.uk/contact.html
+    mvn archetype:generate -DarchetypeCatalog=http://tapestry.apache.org
 
+Maven will prompt you for the archetype to create ("Tapestry 5 Quickstart Project") and the exact version
+number (e.g., "5.4.3"). It also asks you for a group id, an artifact id, and a version number. Once Maven
+dowloads everything, then you can start the app:
+
+    $ cd newapp
+    $ mvn jetty:run
+
+Then just send your browser to http://localhost:8080/newapp
+
+See the [Getting Started](http://tapestry.apache.org/getting-started.html) introduction as well as the [Tapestry Tutorial](http://tapestry.apache.org/tapestry-tutorial.html) for a deeper dive.
+
+## Main Docs
+
+See https://tapestry.apache.org/documentation.html for the details on every Tapestry topic.
