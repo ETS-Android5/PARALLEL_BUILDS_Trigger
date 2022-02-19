@@ -1,21 +1,67 @@
-# Gradle work directory
+archaius-core/MySiteConfiguration/
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+
+# OS generated files #
+######################
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Editor Files #
+################
+*~
+*.swp
+
+# Gradle Files #
+################
 .gradle
 
 # Build output directies
+/target
+*/target
+/build
 */build
-*/bin
-/build/
 
-# Buildship
-org.eclipse.buildship.core.prefs
+# IntelliJ specific files/directories
+out
+.idea
+*.ipr
+*.iws
+*.iml
+atlassian-ide-plugin.xml
 
-.project
+# Eclipse specific files/directories
 .classpath
-/.settings
+.project
+.settings
+.metadata
+*/bin
 
-.vs/
-*.sln
-*.db
-*.vcxproj
-*.vcxproj.filters
-*.opendb
+# NetBeans specific files/directories
+.nbattrs
