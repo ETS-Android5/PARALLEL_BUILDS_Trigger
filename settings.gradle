@@ -1,5 +1,2 @@
-include ':terminal'
-include ':ssh'
-include ':pty'
-include ':JediTerm'
-include ':typeahead'
+rootProject.name = 'cloudinary-android'
+include ':all', ':core', ':preprocess', ':ui', ':sample', ':glide-integration', ':download'
