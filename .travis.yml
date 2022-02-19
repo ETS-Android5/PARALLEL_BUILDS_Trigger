@@ -1,13 +1,16 @@
-dist: trusty
-language: android
-android:
-  components:
-    - tools
-    - build-tools-29.0.2
-    - android-29
-    - extra-android-m2repository
-  # accepting licenses like this seems not to work
-  #licenses:
-  #  - 'android-sdk-license-.+'
+# jgeohash .travis.yml
+
+language: java
+
 jdk:
-  - oraclejdk8
+    - openjdk8
+
+notifications:
+    email:
+        recipients:
+            - asterios.raptis@web.de
+        on_failure: always
+
+after_success:
+  - if [ -e ./gradlew ]; then ./gradlew jacocoTestReport;else gradle jacocoTestReport;fi
+  - bash <(curl -s https://codecov.io/bash)
