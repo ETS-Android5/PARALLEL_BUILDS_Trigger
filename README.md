@@ -1,694 +1,188 @@
-# TestFX
-
-[![Travis CI](https://img.shields.io/travis/TestFX/TestFX/master.svg?label=travis&style=flat-square)](https://travis-ci.org/TestFX/TestFX)
-[![AppVeyor Build Status](https://img.shields.io/appveyor/ci/testfx/testfx/master.svg?style=flat-square)](https://ci.appveyor.com/project/testfx/testfx/branch/master)
-[![Coveralls Test Coverage](https://img.shields.io/coveralls/github/TestFX/TestFX/master.svg?style=flat-square)](https://coveralls.io/github/TestFX/TestFX)
-[![Bintray JCenter](https://api.bintray.com/packages/testfx/testfx/testfx-core/images/download.svg) ](https://bintray.com/testfx/testfx/testfx-core/_latestVersion)
-[![Maven Central](https://img.shields.io/maven-central/v/org.testfx/testfx-core.svg?label=maven&style=flat-square)](https://search.maven.org/#search|ga|1|org.testfx)
-[![Chat on Gitter](https://img.shields.io/gitter/room/testfx/testfx-core.svg?style=flat-square)](https://gitter.im/TestFX/TestFX)
-
-Simple and clean testing for JavaFX.
-
-TestFX requires a minimum Java version of 8 (1.8).
-
-## Documentation
-
-* See the [Javadocs](https://testfx.github.io/TestFX/docs/javadoc/) for latest `master`.
-* See the changelog [CHANGES.md](https://github.com/TestFX/TestFX/blob/master/CHANGES.md) for latest released version.
-
-## Features
-
-- A fluent and clean API.
-- Flexible setup and cleanup of JavaFX test fixtures.
-- Simple robots to simulate user interactions.
-- Rich collection of matchers and assertions to verify expected states of JavaFX scene-graph nodes.
-
-**Support for:**
-
-- Java 8/9/10/11+
-- Multiple testing frameworks ([JUnit 4](https://junit.org/junit4/), [JUnit 5](https://junit.org/junit5/), and [Spock](http://spockframework.org/)).
-- [Hamcrest](http://hamcrest.org/) matchers or [AssertJ](https://assertj.github.io/doc/) assertions (or both!).
-- Screenshots of failed tests.
-- Headless testing using [Monocle](https://github.com/TestFX/Monocle).
-
-## Gradle
-
-To add a dependency on TestFX using Gradle, use the following:
-
-```gradle
-dependencies {
-    testCompile "org.testfx:testfx-core:4.0.16-alpha"
-}
-```
-
-### Java 11+
-Beginning with Java 11, JavaFX is no longer part of the JDK. It has been extracted to its own project: [OpenJFX](https://openjfx.io). This means, extra dependencies must be added to your project.
-
-The easiest way to add the JavaFX libraries to your Gradle project is to use the [JavaFX Gradle Plugin](https://github.com/openjfx/javafx-gradle-plugin).
-
-After following the README for the JavaFX Gradle Plugin you will end up with something like:
-
-```gradle
-plugins {
-    id 'org.openjfx.javafxplugin' version '0.0.8'
-}
-
-javafx {
-    version = '12'
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
-}
-```
-
-### Test Framework
-Next add a dependency corresponding to the testing framework you are using in your project. TestFX currently supports JUnit 4, JUnit 5, and Spock.
-
-#### JUnit 4
-
-```gradle
-dependencies {
-    testCompile "junit:junit:4.13-beta-3"
-    testCompile "org.testfx:testfx-junit:4.0.16-alpha"
-}
-```
-
-#### JUnit 5
-
-```gradle
-dependencies {
-    testCompile 'org.junit.jupiter:junit-jupiter-api:5.5.1'
-    testCompile "org.testfx:testfx-junit5:4.0.16-alpha"
-}
-```
-
-#### Spock
-
-```gradle
-dependencies {
-    testCompile "org.spockframework:spock-core:1.3-groovy-2.5"
-    testCompile "org.testfx:testfx-spock:4.0.16-alpha"
-}
-```
-### Matcher/Assertions Library
-Finally you must add a dependency corresponding to the matcher/assertions libraries that you want to use with TestFX. TestFX currently supports Hamcrest matchers or AssertJ assertions.
-
-#### Hamcrest
-```gradle
-testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.1'
-```
-
-#### AssertJ
-```gradle
-testCompile group: 'org.assertj', name: 'assertj-core', version: '3.13.2'
-```
-
-## Maven
-
-To add a dependency on TestFX using Maven, use the following:
-
-```xml
-<dependency>
-    <groupId>org.testfx</groupId>
-    <artifactId>testfx-core</artifactId>
-    <version>4.0.16-alpha</version>
-    <scope>test</scope>
-</dependency>
-```
-
-### Java 11+
-Beginning with Java 11, JavaFX is no longer part of the JDK. It has been extracted to its own project: [OpenJFX](https://openjfx.io). This means, extra dependencies must be added to your project.
-
-The easiest way to add the JavaFX libraries to your Maven project is to use the [JavaFX Maven Plugin](https://github.com/openjfx/javafx-maven-plugin).
-
-After following the README for the JavaFX Maven Plugin you will end up with something like:
-
-```xml
-<dependencies>
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-controls</artifactId>
-        <version>12.0.2</version>
-    </dependency>
-</dependencies>
-
-<plugins>
-    <plugin>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-maven-plugin</artifactId>
-        <version>0.0.3</version>
-        <configuration>
-            <mainClass>hellofx/org.openjfx.App</mainClass>
-        </configuration>
-    </plugin>
-</plugins>
-```
-
-Have a look at [Maven Central's org.openjfx](https://mvnrepository.com/artifact/org.openjfx) entry for an overview of available modules.
-
-### Test Framework
-Next add a dependency corresponding to the testing framework you are using in your project. TestFX currently supports JUnit 4, JUnit 5, and Spock.
-
-#### JUnit 4
-
-```xml
-<dependency>
-    <groupId>junit</groupId>
-    <artifactId>junit</artifactId>
-    <version>4.13-beta-3</version>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>org.testfx</groupId>
-    <artifactId>testfx-junit</artifactId>
-    <version>4.0.16-alpha</version>
-    <scope>test</scope>
-</dependency>
-```
-
-#### JUnit 5
-
-```xml
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter-api</artifactId>
-    <version>5.5.1</version>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>org.testfx</groupId>
-    <artifactId>testfx-junit5</artifactId>
-    <version>4.0.16-alpha</version>
-    <scope>test</scope>
-</dependency>
-```
-
-#### Spock
-
-```xml
-<dependency>
-    <groupId>org.spockframework</groupId>
-    <artifactId>spock-core</artifactId>
-    <version>1.3-groovy-2.5</version>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>org.testfx</groupId>
-    <artifactId>testfx-spock</artifactId>
-    <version>4.0.16-alpha</version>
-    <scope>test</scope>
-</dependency>
-```
-
-### Matcher/Assertions Library
-Finally you must add a dependency corresponding to the matcher/assertions libraries that you want to use with TestFX. TestFX currently supports Hamcrest matchers or AssertJ assertions.
-
-#### Hamcrest
-```xml
-<dependency>
-    <groupId>org.hamcrest</groupId>
-    <artifactId>hamcrest</artifactId>
-    <version>2.1</version>
-    <scope>test</scope>
-</dependency>
-```
-
-#### AssertJ
-```xml
-<dependency>
-    <groupId>org.assertj</groupId>
-    <artifactId>assertj-core</artifactId>
-    <version>3.13.2</version>
-    <scope>test</scope>
-</dependency>
-```
-
-## Examples
-
-### Hamcrest Matchers
-TestFX brings along a couple of custom Hamcrest matchers in package `org.testfx.matcher.*`.
-
-### AssertJ based Assertions
-TestFX uses its own AssertJ based assertion implementation class: `org.testfx.assertions.api.Assertions`.
-
-#### JUnit 4 with Hamcrest Matchers
-
-```java
-import org.junit.Test;
-import org.testfx.api.FxAssert;
-import org.testfx.framework.junit.ApplicationTest;
-import org.testfx.matcher.control.LabeledMatchers;
-
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-
-public class ClickableButtonTest_JUnit4Hamcrest extends ApplicationTest {
-
-    private Button button;
-
-    /**
-     * Will be called with {@code @Before} semantics, i. e. before each test method.
-     */
-    @Override
-    public void start(Stage stage) {
-        button = new Button("click me!");
-        button.setOnAction(actionEvent -> button.setText("clicked!"));
-        stage.setScene(new Scene(new StackPane(button), 100, 100));
-        stage.show();
-    }
-
-    @Test
-    public void should_contain_button_with_text() {
-        FxAssert.verifyThat(".button", LabeledMatchers.hasText("click me!"));
-    }
-
-    @Test
-    public void when_button_is_clicked_text_changes() {
-        // when:
-        clickOn(".button");
-
-        // then:
-        FxAssert.verifyThat(".button", LabeledMatchers.hasText("clicked!"));
-    }
-}
-```
-
-#### JUnit 4 with AssertJ based Assertions 
-
-```java
-import org.junit.Test;
-import org.testfx.assertions.api.Assertions;
-import org.testfx.framework.junit.ApplicationTest;
-
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-
-public class ClickableButtonTest_JUnit4AssertJ extends ApplicationTest {
-
-    private Button button;
-
-    /**
-     * Will be called with {@code @Before} semantics, i. e. before each test method.
-     */
-    @Override
-    public void start(Stage stage) {
-        button = new Button("click me!");
-        button.setOnAction(actionEvent -> button.setText("clicked!"));
-        stage.setScene(new Scene(new StackPane(button), 100, 100));
-        stage.show();
-    }
-
-    @Test
-    public void should_contain_button_with_text() {
-        Assertions.assertThat(button).hasText("click me!");
-    }
-
-    @Test
-    public void when_button_is_clicked_text_changes() {
-        // when:
-        clickOn(".button");
-
-        // then:
-        Assertions.assertThat(button).hasText("clicked!");
-    }
-}
-```
-
-### JUnit 5 
-TestFX uses [JUnit5's new extension mechanism](https://junit.org/junit5/docs/current/user-guide/#extensions) via `org.junit.jupiter.api.extension.ExtendWith`. By using this, implementors are not forced anymore to inherit from `ApplicationTest` and are free to choose their own super classes. 
-  
-It does also make use of [JUnit5's new dependency injection mechanism](https://junit.org/junit5/docs/current/user-guide/#writing-tests-dependency-injection). By using this, test methods have access to the `FxRobot` instance that must be used in order to execute actions within the UI.
-
-##### JUnit 5 with Hamcrest Matchers
-
-```java
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.testfx.api.FxAssert;
-import org.testfx.api.FxRobot;
-import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.framework.junit5.Start;
-import org.testfx.matcher.control.LabeledMatchers;
-
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-
-@ExtendWith(ApplicationExtension.class)
-class ClickableButtonTest_JUnit5Hamcrest {
-
-    private Button button;
-
-    /**
-     * Will be called with {@code @Before} semantics, i. e. before each test method.
-     *
-     * @param stage - Will be injected by the test runner.
-     */
-    @Start
-    private void start(Stage stage) {
-        button = new Button("click me!");
-        button.setId("myButton");
-        button.setOnAction(actionEvent -> button.setText("clicked!"));
-        stage.setScene(new Scene(new StackPane(button), 100, 100));
-        stage.show();
-    }
-
-    /**
-     * @param robot - Will be injected by the test runner.
-     */
-    @Test
-    void should_contain_button_with_text(FxRobot robot) {
-        FxAssert.verifyThat(button, LabeledMatchers.hasText("click me!"));
-        // or (lookup by css id):
-        FxAssert.verifyThat("#myButton", LabeledMatchers.hasText("click me!"));
-        // or (lookup by css class):
-        FxAssert.verifyThat(".button", LabeledMatchers.hasText("click me!"));
-    }
-
-    /**
-     * @param robot - Will be injected by the test runner.
-     */
-    @Test
-    void when_button_is_clicked_text_changes(FxRobot robot) {
-        // when:
-        robot.clickOn(".button");
-
-        // then:
-        FxAssert.verifyThat(button, LabeledMatchers.hasText("clicked!"));
-        // or (lookup by css id):
-        FxAssert.verifyThat("#myButton", LabeledMatchers.hasText("clicked!"));
-        // or (lookup by css class):
-        FxAssert.verifyThat(".button", LabeledMatchers.hasText("clicked!"));
-    }
-}
-```
-
-#### JUnit 5 with AssertJ Assertions
-
-```java
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.testfx.api.FxRobot;
-import org.testfx.assertions.api.Assertions;
-import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.framework.junit5.Start;
-
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-
-@ExtendWith(ApplicationExtension.class)
-class ClickableButtonTest_JUnit5AssertJ {
-
-    private Button button;
-
-    /**
-     * Will be called with {@code @Before} semantics, i. e. before each test method.
-     *
-     * @param stage - Will be injected by the test runner.
-     */
-    @Start
-    private void start(Stage stage) {
-        button = new Button("click me!");
-        button.setId("myButton");
-        button.setOnAction(actionEvent -> button.setText("clicked!"));
-        stage.setScene(new Scene(new StackPane(button), 100, 100));
-        stage.show();
-    }
-
-    /**
-     * @param robot - Will be injected by the test runner.
-     */
-    @Test
-    void should_contain_button_with_text(FxRobot robot) {
-        Assertions.assertThat(button).hasText("click me!");
-        // or (lookup by css id):
-        Assertions.assertThat(robot.lookup("#myButton").queryAs(Button.class)).hasText("click me!");
-        // or (lookup by css class):
-        Assertions.assertThat(robot.lookup(".button").queryAs(Button.class)).hasText("click me!");
-        // or (query specific type):
-        Assertions.assertThat(robot.lookup(".button").queryButton()).hasText("click me!");
-    }
-
-    /**
-     * @param robot - Will be injected by the test runner.
-     */
-    @Test
-    void when_button_is_clicked_text_changes(FxRobot robot) {
-        // when:
-        robot.clickOn(".button");
-
-        // then:
-        Assertions.assertThat(button).hasText("clicked!");
-        // or (lookup by css id):
-        Assertions.assertThat(robot.lookup("#myButton").queryAs(Button.class)).hasText("clicked!");
-        // or (lookup by css class):
-        Assertions.assertThat(robot.lookup(".button").queryAs(Button.class)).hasText("clicked!");
-        // or (query specific type)
-        Assertions.assertThat(robot.lookup(".button").queryButton()).hasText("clicked!");
-    }
-}
-```
-
-### Spock with Hamcrest Matchers
-
-```java
-import org.testfx.framework.spock.ApplicationSpec;
-
-class ClickableButtonSpec extends ApplicationSpec {
-    @Override
-    void init() throws Exception {
-        FxToolkit.registerStage { new Stage() }
-    }
-
-    @Override
-    void start(Stage stage) {
-        Button button = new Button('click me!')
-        button.setOnAction { button.setText('clicked!') }
-        stage.setScene(new Scene(new StackPane(button), 100, 100))
-        stage.show()
-    }
-
-    @Override
-    void stop() throws Exception {
-        FxToolkit.hideStage()
-    }
-
-    def "should contain button"() {
-        expect:
-        verifyThat('.button', hasText('click me!'))
-    }
-
-    def "should click on button"() {
-        when:
-        clickOn(".button")
-
-        then:
-        verifyThat('.button', hasText('clicked!'))
-    }
-}
-```
-
-## Continuous Integration (CI)
-
-### Travis CI
-
-To run TestFX tests as part of your Travis CI build on Ubuntu and/or macOS
-take the following steps:
-
-1. Ensure that your unit tests are triggered as part of your build script. This
-   is usually the default case when using Maven or Gradle.
-2. If you wish to test in a headless environment your must add [Monocle](https://github.com/TestFX/Monocle)
-    as a test dependency:
-
-    `build.gradle`
-    ```gradle
-    dependencies {
-        testCompile "org.testfx:openjfx-monocle:8u76-b04" // jdk-9+181 for Java 9, jdk-11+26 for Java 11
-    }
-    ```
-
-    `pom.xml`
-    ```xml
-    <dependency>
-        <groupId>org.testfx</groupId>
-        <artifactId>openjfx-monocle</artifactId>
-        <version>8u76-b04</version> <!-- jdk-9+181 for Java 9, jdk-11+26 for Java 11 -->
-        <scope>test</scope>
-    </dependency>
-    ```
-3. Base your Travis configuration on the following. Some different build variations are shown (Glass/AWT robot,
-    Headed/Headless, (Hi)DPI, etc.) adjust the build matrix to your requirements.
-
-    `.travis.yml`
-    ``` yaml
-    language: java
-
-    sudo: false   # Linux OS: run in container
-
-    matrix:
-      include:
-        # Ubuntu Linux (trusty) / Oracle JDK 8 / Headed (AWT Robot)
-        - os: linux
-          dist: trusty
-          jdk: oraclejdk8
-          env:
-            - _JAVA_OPTIONS="-Dtestfx.robot=awt"
-        # Ubuntu Linux (trusty) / Oracle JDK 8 / Headed (Glass Robot) / HiDPI
-        - os: linux
-          dist: trusty
-          jdk: oraclejdk8
-          env:
-            - _JAVA_OPTIONS="-Dtestfx.robot=glass -Dglass.gtk.uiScale=2.0"
-        # Ubuntu Linux (trusty) / Oracle JDK 8 / Headless
-        - os: linux
-          dist: trusty
-          jdk: oraclejdk8
-          env:
-            - _JAVA_OPTIONS="-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw"
-        # macOS / Oracle JDK 8 / Headless
-        - os: osx
-          osx_image: xcode9.4
-          jdk: oraclejdk8
-          env:
-            - _JAVA_OPTIONS="-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.verbose=true"
-        # Headed macOS is not currently possible on Travis.
-
-    addons:
-      apt:
-        packages:
-          - oracle-java8-installer
-
-    before_install:
-      - if [[ "${TRAVIS_OS_NAME}" == linux ]]; then export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start; fi
-
-    install: true
-
-    before_script:
-      - if [[ "${TRAVIS_OS_NAME}" == osx ]]; then brew update; brew cask reinstall caskroom/versions/java8; fi
-
-    script:
-      - ./gradlew check
-
-    before_cache:
-      - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-      - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-      - rm -f  $HOME/.gradle/caches/*/fileHashes/fileHashes.bin
-      - rm -f  $HOME/.gradle/caches/*/fileHashes/fileHashes.lock
-
-    cache:
-      directories:
-        - $HOME/.gradle/caches/
-        - $HOME/.gradle/wrapper/
-        - $HOME/.m2
-    ```
-
-Your TestFX tests should now run as part of your Travis CI build.
-
-### Appveyor (Windows)
-
-To run TestFX tests as part of your Appveyor build on Windows take the following
-steps:
-
-1. Ensure that your unit tests are triggered as part of your build script. This
-   is usually the default case when using Maven or Gradle.
-2. If you wish to test in a headless environment your must add [Monocle](https://github.com/TestFX/Monocle)
-    as a test dependency:
-
-    `build.gradle`
-    ```gradle
-    dependencies {
-        testCompile "org.testfx:openjfx-monocle:8u76-b04" // jdk-9+181 for Java 9
-    }
-    ```
-
-    `pom.xml`
-    ```xml
-    <dependency>
-        <groupId>org.testfx</groupId>
-        <artifactId>openjfx-monocle</artifactId>
-        <version>8u76-b04</version> <!-- jdk-9+181 for Java 9 -->
-        <scope>test</scope>
-    </dependency>
-    ```
-3. Base your Appveyor configuration on the following. Some different build variations are shown (Glass/AWT robot,
-    Headed/Headless, (Hi)DPI, etc.) adjust the build matrix to your requirements.
-
-    `appveyor.yml`
-    ```yaml
-    version: "{branch} {build}"
-    environment:
-      matrix:
-        # Java 8 / AWT Robot
-        - JAVA_VERSION: "8"
-          JAVA_HOME: C:\Program Files\Java\jdk1.8.0
-          _JAVA_OPTIONS: "-Dtestfx.robot=awt -Dtestfx.awt.scale=true"
-        # Java 8 / AWT Robot / HiDPI
-        - JAVA_VERSION: "8"
-          JAVA_HOME: C:\Program Files\Java\jdk1.8.0
-          _JAVA_OPTIONS: "-Dtestfx.robot=awt -Dtestfx.awt.scale=true -Dglass.win.uiScale=200%"
-        # Java 8 / Headless
-        - JAVA_VERSION: "8"
-          JAVA_HOME: C:\Program Files\Java\jdk1.8.0
-          _JAVA_OPTIONS: "-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k"
-        # Java 10 / AWT Robot / HiDPI
-        - JAVA_VERSION: "10"
-          JAVA_HOME: C:\jdk10
-          _JAVA_OPTIONS: "-Dtestfx.robot=awt -Dtestfx.awt.scale=true -Dglass.win.uiScale=200%"
-        # Java 11 / AWT Robot / HiDPI
-        - JAVA_VERSION: "11"
-          JAVA_HOME: C:\jdk11
-          _JAVA_OPTIONS: "-Dtestfx.robot=awt -Dtestfx.awt.scale=true -Dglass.win.uiScale=200%"
-
-    build_script:
-      - ps: |
-          if ($env:JAVA_VERSION -eq "11") {
-            $client = New-Object net.webclient
-            $client.DownloadFile('http://jdk.java.net/11/', 'C:\Users\appveyor\openjdk11.html')
-            $openJdk11 = cat C:\Users\appveyor\openjdk11.html | where { $_ -match "href.*https://download.java.net.*jdk11.*windows-x64.*zip\`"" } | %{ $_ -replace "^.*https:", "https:" } | %{ $_ -replace ".zip\`".*$", ".zip" }
-            echo "Download boot JDK from: $openJdk11"
-            $client.DownloadFile($openJdk11, 'C:\Users\appveyor\openjdk11.zip')
-            Expand-Archive -Path 'C:\Users\appveyor\openjdk11.zip' -DestinationPath 'C:\Users\appveyor\openjdk11'
-            Copy-Item -Path 'C:\Users\appveyor\openjdk11\*\' -Destination 'C:\jdk11' -Recurse -Force
-          }
-          elseif ($env:JAVA_VERSION -eq "10") {
-            choco install jdk10 --version 10.0.2 --force --cache 'C:\ProgramData\chocolatey\cache' -params 'installdir=c:\\jdk10'
-          }
-
-          // Note: Currently Java 8 is the default JDK, if that changes the above will have to change accordingly.
-
-    shallow_clone: true
-
-    build:
-      verbosity: detailed
-
-    test_script:
-      - gradlew build --no-daemon
-
-    cache:
-      - C:\Users\appveyor\.gradle\caches
-      - C:\Users\appveyor\.gradle\wrapper -> .gradle-wrapper\gradle-wrapper.properties
-      - C:\ProgramData\chocolatey\bin -> appveyor.yml
-      - C:\ProgramData\chocolatey\lib -> appveyor.yml
-      - C:\ProgramData\chocolatey\cache -> appveyor.yml
-    ```
-
-## Chat
-
-Head over to our [gitter chat](https://gitter.im/TestFX/TestFX) for discussion and questions.
-
-## TestFX Legacy: Deprecated
-
-The `testfx-legacy` subproject is deprecated and no longer supported. It is highly recommended
-that you switch from using `testfx-legacy`. If you want to continue using it you should cap
-the versions of `testfx-core` and `testfx-legacy` to `4.0.8-alpha`, which was the last released
-version of `testfx-legacy`. Using a newer version of `testfx-core` with an older version of
-`testfx-legacy` will very likely break (and does with `testfx-core` versions past `4.0.10-alpha`).
-
-## Credits
-
-Thanks to all of the [contributors of TestFX](https://github.com/TestFX/TestFX/graphs/contributors)!
+[![Build Status](https://travis-ci.org/sitewhere/sitewhere.svg?branch=master)](https://travis-ci.org/sitewhere/sitewhere) 
+[![Docker Pulls](https://img.shields.io/docker/pulls/sitewhere/service-web-rest.svg?label=Docker%20Pulls&style=flat-square)](https://hub.docker.com/u/sitewhere) 
+
+![SiteWhere](https://s3.amazonaws.com/sitewhere-branding/SiteWhereLogo.svg)
+
+---
+
+SiteWhere is an industrial strength, open source IoT Application Enablement Platform 
+which facilitates the ingestion, storage, processing, and integration of IoT device data 
+at massive scale. The platform leverages a microservices architecture which runs on top of 
+cutting-edge technologies such as [Kubernetes](https://kubernetes.io/), [Istio](https://istio.io), 
+and [Kafka](https://kafka.apache.org/) in order to scale efficiently 
+to the loads expected in large IoT projects. 
+
+SiteWhere embraces a distributed architecture which runs on Kubernetes and provides 
+both infrastructure such as highly-available databases and MQTT brokers as well as 
+microservices to facilitate various aspects of IoT project development. The platform is 
+built with a framework approach using clearly defined APIs so that new technologies may easily 
+be integrated as the IoT ecosystem evolves.
+
+![SiteWhere Administration](https://sitewhere-web.s3.amazonaws.com/github-readme/admin-ui-2.1.0.png "SiteWhere Administration")
+
+## Deployment and Orchestration
+
+SiteWhere is composed of Java-based microservices which are built as
+[Docker](https://www.docker.com/) images and deployed to Kubernetes for
+orchestration. To simplify installation and configuration, [Helm](https://helm.sh/) 
+is used to provide standard templates for various deployment scenarios. Helm
+[charts](https://github.com/sitewhere/sitewhere-recipes/tree/master/charts)
+are provided to supply both the microservices and the dependencies needed to 
+run a complete SiteWhere deployment. Infrastructure components include 
+technologies such as Apache Zookeeper and Kafka, highly available databases such
+as MongoDB, InfluxDB, and Cassandra, and other supporting technologies 
+such as MQTT brokers.
+
+## Microservices
+
+Rather than using a monolithic approach, SiteWhere is based on many microservices
+running as a distributed system. Each microservice is a completely self-contained 
+entity that has its own configuration schema, internal components, data persistence, 
+and interactions with the event processing pipeline. SiteWhere microservices
+are built on top of a custom microservice framework and run as separate
+[Spring Boot](https://projects.spring.io/spring-boot/) processes, each
+contained in its own [Docker](https://www.docker.com/) image.
+
+![SiteWhere Architecture](https://sitewhere-web.s3.amazonaws.com/github-readme/sitewhere-microservices.png "SiteWhere 2.0 Architecture")
+
+### Separation of Concerns
+
+Separating the system logic into microservices allows the interactions
+between various areas of the system to be more clearly defined. It also allows
+parts of the pipeline to be shutdown or fail gracefully without preventing other
+parts of the system from functioning. The event processing pipeline, which spans
+many of the microservices, is buffered by Kafka so that data processing has
+strong delivery guarantees while maintaining high throughput.
+
+### Scale What You Need. Leave Out What You Don't
+
+The microservice architecture allows individual functional areas of the system to be scaled
+independently or left out completely. In use cases where REST processing tends to
+be a bottleneck, multiple REST microservices can be run concurrently to handle the load.
+Conversely, services such as presence management that may not be required can be left
+out so that processing power can be dedicated to other aspects of the system.
+
+## Instance Management
+
+SiteWhere supports the concept of an _instance_, which allows the distributed system 
+to act as a cohesive unit with some aspects addressed at the global level. All of the 
+microservices for a single SiteWhere instance must be running on the same Kubernetes 
+infrastucture, though the system may be spread across tens or hundreds of machines 
+to distribute the processing load.
+
+### Service Mesh with Istio
+
+SiteWhere leverages [Istio](https://istio.io/) to provide a service mesh for
+the system microservices, allowing the platform to be scaled dynamically while 
+also providing a great deal of control over how data is routed. Istio allows
+modern methods such as canary testing and fault injection to be used to 
+provide a more robust and fault-tolerant system. It also allows for detailed
+monitoring and tracing of the data flowing through the components.
+
+### Centralized Configuration Management with Apache ZooKeeper
+
+SiteWhere configuration is stored in [Apache ZooKeeper](https://zookeeper.apache.org/) 
+to allow for a scalable, externalized approach to configuration management. ZooKeeper 
+contains a hierarchical structure which represents the configuration for one or more 
+SiteWhere instances and all of the microservices that are used to realize them. The 
+configuration is replicated for high availabilty.
+
+Each microservice has a direct connection to ZooKeeper and uses the hierarchy to 
+determine its configuration at runtime. Microservices listen for changes to the 
+configuration data and react dynamically to updates. No configuration
+is stored locally within the microservice, which prevents problems with
+keeping services in sync as system configuration is updated.
+
+### Distributed Storage with Rook.io
+
+Since many of the system components such as Zookeeper, Kafka, and various
+databases require access to persistent storage, SiteWhere uses
+[Rook.io](https://rook.io/) within Kubernetes to supply distributed,
+replicated block storage that is resilient to hardware failures while
+still offering good performance characteristics. As storage and throughput
+needs increase over time, new storage devices can be made available
+dynamically. The underlying [Ceph](https://ceph.com/) architecture
+used by Rook.io can handle _exobytes_ of data while allowing data
+to be resilient to failures at the node, rack, or even datacenter level.
+
+## High Performance Data Processing Pipeline
+
+The event processing pipeline in SiteWhere uses [Apache Kafka](https://kafka.apache.org/) 
+to provide a resilient, high-performance mechanism for progressively processing device 
+event data. Microservices can plug in to key points in the event processing pipeline, 
+reading data from well-known inbound topics, processing data, then sending data to well-known 
+outbound topics. External entites that are interested in data at any point in the pipeline 
+can act as consumers of the SiteWhere topics to use the data as it moves through the system.
+
+### Fully Asynchronous Pipeline Processing
+
+The SiteWhere event processing pipeline leverages Kafka's messaging constructs to allow
+device event data to be processed asynchronously. If a microservice shuts down and no other 
+replicas are available to process the load. The data will be queued until a replica starts
+and begins processing again. This acts as a guarantee against data loss as data is always
+backed by Kafka's high-performance storage. SiteWhere microservices leverage Kafka's consumer 
+groups concept to distribute load across multiple consumers and scale processing accordingly.
+
+Using Kafka also has other advantages that are leveraged by SiteWhere. Since all data in
+the distributed log is stored on disk, it is possible to "replay" the event stream based
+on previously gathered data. This is extremely valuable for aspects such as debugging
+processing logic or load testing the system.
+
+## API Connectivity Between Microservices
+
+While device event data generally flows in a pipeline from microservice to microservice on
+Kafka topics, there are also API operations that need to occur in real time between the
+microservices. For instance, device management and event management functions are contained in
+their own microservices, but are required by many other components of the system. Many of the
+SiteWhere microservices offer APIs which may be accessed by other microservices to
+support aspects such as storing persistent data or initiating microservice-specific
+services.
+
+### Using gRPC for a Performance Boost
+
+Rather than solely using REST services based on HTTP 1.x, which tend to have significant
+connection overhead, SiteWhere uses [gRPC](https://grpc.io/) to establish a long-lived
+connection between microservices that need to communicate with each other. Since gRPC uses
+persistent HTTP2 connections, the overhead for interactions is greatly reduced, allowing
+for decoupling without a significant performance penalty. Istio also allows the gRPC
+connections to be multiplexed across multiple replicas of a microservice to scale 
+processing and offer redundancy.
+
+The entire SiteWhere data model has been captured in
+[Google Protocol Buffers](https://developers.google.com/protocol-buffers/) format so that
+it can be used within GRPC services. All of the SiteWhere APIs are exposed directly as
+gRPC services as well, allowing for high-performance, low-latency access to all API
+functions. The REST APIs are still made available via the Web/REST microservice (acting
+as an API gateway), but they use the gRPC APIs underneath to provide a consistent approach 
+to accessing data.
+
+## Multitenancy
+
+SiteWhere is designed for large-scale IoT projects which may involve many system tenants
+sharing a single SiteWhere instance. A key differentiator for SiteWhere compared to most
+IoT platforms is that each tenant runs in isolation from other tenants. By default, tenants
+do not share database resources or pipeline processing and have a completely separate 
+configuration lifecycles. With this approach, each tenant may use its own database 
+technologies, external integrations, and other configuration options. Parts of the tenant's
+processing pipeline may be reconfigured/restarted without causing an interruption to 
+other tenants.
+
+### Data Privacy
+
+An important consequence of the way SiteWhere handles multitenancy is that each tenant's 
+data is separated from the data of other tenants. Most platforms that offer multitenancy
+store data for all tenants in shared tables, differentiated only by a tenant id. The shared
+approach opens up the possibility of one tenant's data corrupting another, which is not
+an acceptable risk in many IoT deployments. In addition, each tenant has its own processing
+pipelines, so in-flight data is never co-mingled either.
+
+Having dedicated resources for tenants can be expensive in terms of memory and processing
+resources, so SiteWhere also offers the concept of _customers_ within each tenant. Customers
+allow data to be differentiated within a tenant, but without having a separate dedicated
+database and pipelines. In cases where colocated data is acceptable, the tenant can have
+any number of customers, which shared the same database and processing pipeline. This allows 
+the best of both worlds in terms of security and scalability.
+
+* * * *
+
+Copyright (c) 2009-2019 [SiteWhere LLC](http://www.sitewhere.com). All rights reserved.
