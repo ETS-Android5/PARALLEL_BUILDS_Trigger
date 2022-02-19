@@ -1,188 +1,243 @@
-[![Build Status](https://travis-ci.org/sitewhere/sitewhere.svg?branch=master)](https://travis-ci.org/sitewhere/sitewhere) 
-[![Docker Pulls](https://img.shields.io/docker/pulls/sitewhere/service-web-rest.svg?label=Docker%20Pulls&style=flat-square)](https://hub.docker.com/u/sitewhere) 
+# Checkout (Android In-App Billing Library)
 
-![SiteWhere](https://s3.amazonaws.com/sitewhere-branding/SiteWhereLogo.svg)
+## Description
 
----
+<img src="https://github.com/serso/android-checkout/blob/master/app/misc/res/logo256x256.png" align="right" />
 
-SiteWhere is an industrial strength, open source IoT Application Enablement Platform 
-which facilitates the ingestion, storage, processing, and integration of IoT device data 
-at massive scale. The platform leverages a microservices architecture which runs on top of 
-cutting-edge technologies such as [Kubernetes](https://kubernetes.io/), [Istio](https://istio.io), 
-and [Kafka](https://kafka.apache.org/) in order to scale efficiently 
-to the loads expected in large IoT projects. 
+**Checkout** is an implementation of [Android In-App Billing API (v3+)](http://developer.android.com/google/play/billing/api.html).
+Its main goal is to make integration of in-app products as simple and
+straightforward as possible: developers should not spend much time on
+implementing boring In-App Billing API but should focus on more important
+things - their apps. With this in mind, the library was designed to be
+fast, flexible and secure.
 
-SiteWhere embraces a distributed architecture which runs on Kubernetes and provides 
-both infrastructure such as highly-available databases and MQTT brokers as well as 
-microservices to facilitate various aspects of IoT project development. The platform is 
-built with a framework approach using clearly defined APIs so that new technologies may easily 
-be integrated as the IoT ecosystem evolves.
+**Current version:** 1.2.3
 
-![SiteWhere Administration](https://sitewhere-web.s3.amazonaws.com/github-readme/admin-ui-2.1.0.png "SiteWhere Administration")
+### Why?
 
-## Deployment and Orchestration
+**Checkout** solves common problems that developers face while working 
+with billing on Android, such as:
+- How to cancel all billing requests when Activity is destroyed?
+- How to query purchase information in the background?
+  See also [Querying for Items Available for Purchase](http://developer.android.com/google/play/billing/billing_integrate.html#QueryDetails)
+- How to verify a purchase?
+  See also [Security And Design](http://developer.android.com/google/play/billing/billing_best_practices.html)
+- How to load all the purchases using `continuationToken` or SKU
+  details (one request is limited by 20 items)?
+- How to add billing with a minimum amount of boilerplate code?
 
-SiteWhere is composed of Java-based microservices which are built as
-[Docker](https://www.docker.com/) images and deployed to Kubernetes for
-orchestration. To simplify installation and configuration, [Helm](https://helm.sh/) 
-is used to provide standard templates for various deployment scenarios. Helm
-[charts](https://github.com/sitewhere/sitewhere-recipes/tree/master/charts)
-are provided to supply both the microservices and the dependencies needed to 
-run a complete SiteWhere deployment. Infrastructure components include 
-technologies such as Apache Zookeeper and Kafka, highly available databases such
-as MongoDB, InfluxDB, and Cassandra, and other supporting technologies 
-such as MQTT brokers.
+**Checkout** can be used with any dependency injection framework or
+without it. It has a clear distinction of a functionality available in
+different contexts: purchase can be done only from `Activity` while
+SKU information can be loaded in `Service` or `Application`.
+Moreover, it has a good test coverage and is continuously build on Travis
+CI:  [![Build Status](https://travis-ci.org/serso/android-checkout.svg)](https://travis-ci.org/serso/android-checkout)
 
-## Microservices
+## Getting started
 
-Rather than using a monolithic approach, SiteWhere is based on many microservices
-running as a distributed system. Each microservice is a completely self-contained 
-entity that has its own configuration schema, internal components, data persistence, 
-and interactions with the event processing pipeline. SiteWhere microservices
-are built on top of a custom microservice framework and run as separate
-[Spring Boot](https://projects.spring.io/spring-boot/) processes, each
-contained in its own [Docker](https://www.docker.com/) image.
+### Setup
 
-![SiteWhere Architecture](https://sitewhere-web.s3.amazonaws.com/github-readme/sitewhere-microservices.png "SiteWhere 2.0 Architecture")
+- Gradle/Android Studio in `build.gradle`:
+```groovy
+implementation 'org.solovyev.android:checkout:1.2.3'
+```
+**Note:** if you get the following warning
+> Conflict with dependency 'com.google.code.findbugs:jsr305'. Resolved versions for app (a.b.c) and test app (x.y.z) differ.
 
-### Separation of Concerns
+you should change the dependencies of `com.android.support.test.espresso:espresso-core` to
+```groovy
+androidTestImplementation('com.android.support.test.espresso:espresso-core:x.y.z', {
+    // use version of jsr305 provided by Checkout
+    exclude group: 'com.google.code.findbugs', module: 'jsr305'
+})
+```
+See [Android Studio](http://g.co/androidstudio/app-test-app-conflict) and [Gradle](https://docs.gradle.org/current/dsl/org.gradle.api.artifacts.ResolutionStrategy.html) documentation for details.
+- Maven in `pom.xml`:
+```xml
+<dependency>
+    <groupId>org.solovyev.android</groupId>
+    <artifactId>checkout</artifactId>
+    <version>1.2.3</version>
+    <type>aar</type>
+</dependency>
+```
+- Download sources from github and either copy them to your project or import them as a project dependency
+- Download artifacts from the [repository](https://oss.sonatype.org/content/repositories/releases/org/solovyev/android/checkout/)
 
-Separating the system logic into microservices allows the interactions
-between various areas of the system to be more clearly defined. It also allows
-parts of the pipeline to be shutdown or fail gracefully without preventing other
-parts of the system from functioning. The event processing pipeline, which spans
-many of the microservices, is buffered by Kafka so that data processing has
-strong delivery guarantees while maintaining high throughput.
+### Permissions
 
-### Scale What You Need. Leave Out What You Don't
+In-app billing requires `com.android.vending.BILLING` permission to be
+set in the app. This permission is automatically added to your app's
+`AndroidManifest.xml` by Gradle. You can declare this permission
+explicitly by adding the following line to the `AndroidManifest.xml`:
+```xml
+<uses-permission android:name="com.android.vending.BILLING" />
+```
 
-The microservice architecture allows individual functional areas of the system to be scaled
-independently or left out completely. In use cases where REST processing tends to
-be a bottleneck, multiple REST microservices can be run concurrently to handle the load.
-Conversely, services such as presence management that may not be required can be left
-out so that processing power can be dedicated to other aspects of the system.
+### Tutorial
 
-## Instance Management
+A tutorial for the sample app is available on [Medium](https://medium.com/@se.solovyev/implementing-in-app-billing-in-android-4896232c7d6b).
+Take a look if you prefer step-by-step guides over documentation.
 
-SiteWhere supports the concept of an _instance_, which allows the distributed system 
-to act as a cohesive unit with some aspects addressed at the global level. All of the 
-microservices for a single SiteWhere instance must be running on the same Kubernetes 
-infrastucture, though the system may be spread across tens or hundreds of machines 
-to distribute the processing load.
+### Example
 
-### Service Mesh with Istio
+Say there is an app that contains one in-app product with "sku_01" id.
+Then `Application` class might look like this:
+```java
+public class MyApplication extends Application {
 
-SiteWhere leverages [Istio](https://istio.io/) to provide a service mesh for
-the system microservices, allowing the platform to be scaled dynamically while 
-also providing a great deal of control over how data is routed. Istio allows
-modern methods such as canary testing and fault injection to be used to 
-provide a more robust and fault-tolerant system. It also allows for detailed
-monitoring and tracing of the data flowing through the components.
+    private static MyApplication sInstance;
 
-### Centralized Configuration Management with Apache ZooKeeper
+    private final Billing mBilling = new Billing(this, new Billing.DefaultConfiguration() {
+        @Override
+        public String getPublicKey() {
+            return "Your public key, don't forget about encryption";
+        }
+    });
 
-SiteWhere configuration is stored in [Apache ZooKeeper](https://zookeeper.apache.org/) 
-to allow for a scalable, externalized approach to configuration management. ZooKeeper 
-contains a hierarchical structure which represents the configuration for one or more 
-SiteWhere instances and all of the microservices that are used to realize them. The 
-configuration is replicated for high availabilty.
+    public MyApplication() {
+        sInstance = this;
+    }
 
-Each microservice has a direct connection to ZooKeeper and uses the hierarchy to 
-determine its configuration at runtime. Microservices listen for changes to the 
-configuration data and react dynamically to updates. No configuration
-is stored locally within the microservice, which prevents problems with
-keeping services in sync as system configuration is updated.
+    public static MyApplication get() {
+        return sInstance;
+    }
 
-### Distributed Storage with Rook.io
+    public Billing getBilling() {
+        return mBilling;
+    }
+}
+```
+And `Activity` class like this:
+```java
+public class MyActivity extends Activity implements View.OnClickListener {
 
-Since many of the system components such as Zookeeper, Kafka, and various
-databases require access to persistent storage, SiteWhere uses
-[Rook.io](https://rook.io/) within Kubernetes to supply distributed,
-replicated block storage that is resilient to hardware failures while
-still offering good performance characteristics. As storage and throughput
-needs increase over time, new storage devices can be made available
-dynamically. The underlying [Ceph](https://ceph.com/) architecture
-used by Rook.io can handle _exobytes_ of data while allowing data
-to be resilient to failures at the node, rack, or even datacenter level.
+    private class PurchaseListener extends EmptyRequestListener<Purchase> {
+        @Override
+        public void onSuccess(Purchase purchase) {
+           // here you can process the loaded purchase
+        }
+        
+        @Override
+        public void onError(int response, Exception e) {
+            // handle errors here
+        }
+    }
 
-## High Performance Data Processing Pipeline
+    private class InventoryCallback implements Inventory.Callback {
+        @Override
+        public void onLoaded(Inventory.Products products) {
+            // your code here
+        }
+    }
 
-The event processing pipeline in SiteWhere uses [Apache Kafka](https://kafka.apache.org/) 
-to provide a resilient, high-performance mechanism for progressively processing device 
-event data. Microservices can plug in to key points in the event processing pipeline, 
-reading data from well-known inbound topics, processing data, then sending data to well-known 
-outbound topics. External entites that are interested in data at any point in the pipeline 
-can act as consumers of the SiteWhere topics to use the data as it moves through the system.
+    private final ActivityCheckout mCheckout = Checkout.forActivity(this, MyApplication.get().getBilling());
+    private Inventory mInventory;
 
-### Fully Asynchronous Pipeline Processing
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mCheckout.start();
 
-The SiteWhere event processing pipeline leverages Kafka's messaging constructs to allow
-device event data to be processed asynchronously. If a microservice shuts down and no other 
-replicas are available to process the load. The data will be queued until a replica starts
-and begins processing again. This acts as a guarantee against data loss as data is always
-backed by Kafka's high-performance storage. SiteWhere microservices leverage Kafka's consumer 
-groups concept to distribute load across multiple consumers and scale processing accordingly.
+        mCheckout.createPurchaseFlow(new PurchaseListener());
 
-Using Kafka also has other advantages that are leveraged by SiteWhere. Since all data in
-the distributed log is stored on disk, it is possible to "replay" the event stream based
-on previously gathered data. This is extremely valuable for aspects such as debugging
-processing logic or load testing the system.
+        mInventory = mCheckout.makeInventory();
+        mInventory.load(Inventory.Request.create()
+                .loadAllPurchases()
+                .loadSkus(ProductTypes.IN_APP, "sku_01"), new InventoryCallback());
+    }
 
-## API Connectivity Between Microservices
+    @Override
+    protected void onDestroy() {
+        mCheckout.stop();
+        super.onDestroy();
+    }
 
-While device event data generally flows in a pipeline from microservice to microservice on
-Kafka topics, there are also API operations that need to occur in real time between the
-microservices. For instance, device management and event management functions are contained in
-their own microservices, but are required by many other components of the system. Many of the
-SiteWhere microservices offer APIs which may be accessed by other microservices to
-support aspects such as storing persistent data or initiating microservice-specific
-services.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mCheckout.onActivityResult(requestCode, resultCode, data);
+    }
 
-### Using gRPC for a Performance Boost
+    @Override
+    public void onClick(View v) {
+        mCheckout.whenReady(new Checkout.EmptyListener() {
+            @Override
+            public void onReady(BillingRequests requests) {
+                requests.purchase(ProductTypes.IN_APP, "sku_01", null, mCheckout.getPurchaseFlow());
+            }
+        });
+    }
+}
+```
 
-Rather than solely using REST services based on HTTP 1.x, which tend to have significant
-connection overhead, SiteWhere uses [gRPC](https://grpc.io/) to establish a long-lived
-connection between microservices that need to communicate with each other. Since gRPC uses
-persistent HTTP2 connections, the overhead for interactions is greatly reduced, allowing
-for decoupling without a significant performance penalty. Istio also allows the gRPC
-connections to be multiplexed across multiple replicas of a microservice to scale 
-processing and offer redundancy.
+## Advanced usage
 
-The entire SiteWhere data model has been captured in
-[Google Protocol Buffers](https://developers.google.com/protocol-buffers/) format so that
-it can be used within GRPC services. All of the SiteWhere APIs are exposed directly as
-gRPC services as well, allowing for high-performance, low-latency access to all API
-functions. The REST APIs are still made available via the Web/REST microservice (acting
-as an API gateway), but they use the gRPC APIs underneath to provide a consistent approach 
-to accessing data.
+### Samples
 
-## Multitenancy
+A sample app is available on [Google Play](https://play.google.com/store/apps/details?id=org.solovyev.android.checkout.app) ([source code](https://github.com/serso/android-checkout/tree/master/app)).
+There is also a tutorial for it on [Medium](https://medium.com/@se.solovyev/implementing-in-app-billing-in-android-4896232c7d6b).
 
-SiteWhere is designed for large-scale IoT projects which may involve many system tenants
-sharing a single SiteWhere instance. A key differentiator for SiteWhere compared to most
-IoT platforms is that each tenant runs in isolation from other tenants. By default, tenants
-do not share database resources or pipeline processing and have a completely separate 
-configuration lifecycles. With this approach, each tenant may use its own database 
-technologies, external integrations, and other configuration options. Parts of the tenant's
-processing pipeline may be reconfigured/restarted without causing an interruption to 
-other tenants.
+### Building from the sources
 
-### Data Privacy
+**Checkout** is built by Gradle. The project structure and build procedure
+are standard for Android libraries. An environmental variable ANDROID_HOME
+must be set before building and should point to Android SDK installation
+folder (f.e. /opt/android/sdk).
+Please refer to [Gradle User Guide](http://tools.android.com/tech-docs/new-build-system/user-guide) for more information about the building.
 
-An important consequence of the way SiteWhere handles multitenancy is that each tenant's 
-data is separated from the data of other tenants. Most platforms that offer multitenancy
-store data for all tenants in shared tables, differentiated only by a tenant id. The shared
-approach opens up the possibility of one tenant's data corrupting another, which is not
-an acceptable risk in many IoT deployments. In addition, each tenant has its own processing
-pipelines, so in-flight data is never co-mingled either.
+### Classes overview
 
-Having dedicated resources for tenants can be expensive in terms of memory and processing
-resources, so SiteWhere also offers the concept of _customers_ within each tenant. Customers
-allow data to be differentiated within a tenant, but without having a separate dedicated
-database and pipelines. In cases where colocated data is acceptable, the tenant can have
-any number of customers, which shared the same database and processing pipeline. This allows 
-the best of both worlds in terms of security and scalability.
+**Checkout** contains three main classes: [Billing](https://github.com/serso/android-checkout/blob/master/lib/src/main/java/org/solovyev/android/checkout/Billing.java), [Checkout](https://github.com/serso/android-checkout/blob/master/lib/src/main/java/org/solovyev/android/checkout/Checkout.java) and [Inventory](https://github.com/serso/android-checkout/blob/master/lib/src/main/java/org/solovyev/android/checkout/Inventory.java).
 
-* * * *
+**Billing** is a core class of **Checkout**'s implementation of the
+billing API. It is responsible for:
+- connecting and disconnecting to the [billing service](https://github.com/serso/android-checkout/blob/master/lib/src/main/aidl/com/android/vending/billing/IInAppBillingService.aidl)
+- performing [billing requests](https://github.com/serso/android-checkout/blob/master/lib/src/main/java/org/solovyev/android/checkout/BillingRequests.java)
+- caching the requests results
+- creating [Checkout](https://github.com/serso/android-checkout/blob/master/lib/src/main/java/org/solovyev/android/checkout/Checkout.java) objects
+- logging
 
-Copyright (c) 2009-2019 [SiteWhere LLC](http://www.sitewhere.com). All rights reserved.
+Only one instance of **Billing** should be used in the app in order to
+avoid multiple connections to the billing service. Though this class
+might be used directly it's easier to work with [Checkout](https://github.com/serso/android-checkout/blob/master/lib/src/main/java/org/solovyev/android/checkout/Checkout.java)
+instead.
+
+**Checkout** is a middle tier of the library. It uses **Billing** in a
+certain context, e.g. in `Application`, `Activity` or `Service`,
+checks whether billing is supported and executes the requests. [ActivityCheckout](https://github.com/serso/android-checkout/blob/master/lib/src/main/java/org/solovyev/android/checkout/ActivityCheckout.java)
+is a subclass capable of purchasing items.
+
+**Inventory** loads information about products, SKUs and purchases. Its
+lifecycle is bound to the lifecycle of **Checkout** in which it was created.
+
+### Purchase verification
+
+By default, **Checkout** uses simple purchase verification algorithm (see
+[DefaultPurchaseVerifier](https://github.com/serso/android-checkout/blob/master/lib/src/main/java/org/solovyev/android/checkout/DefaultPurchaseVerifier.java)). As explained in [Android documentation](http://developer.android.com/google/play/billing/billing_best_practices.html#sign)
+it's better to verify purchases on a remote server. **Checkout** allows
+you to provide your own [PurchaseVerifier](https://github.com/serso/android-checkout/blob/master/lib/src/main/java/org/solovyev/android/checkout/PurchaseVerifier.java) via `Billing.Configuration#getPurchaseVerifier`.
+[BasePurchaseVerifier](https://github.com/serso/android-checkout/blob/master/lib/src/main/java/org/solovyev/android/checkout/BasePurchaseVerifier.java)  can be used as a base class for purchase verifiers that
+should be executed on a background thread.
+
+### Proguard
+
+Library's proguard rules are automatically added to the app project by
+Gradle. You can declare them explicitly by copying the contents of [proguard-rules.txt](https://github.com/serso/android-checkout/blob/master/lib/proguard-rules.txt)
+to your proguard configuration.
+
+## License
+
+Copyright 2016 serso aka se.solovyev
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
