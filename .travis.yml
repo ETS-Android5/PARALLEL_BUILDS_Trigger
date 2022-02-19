@@ -1,19 +1,5 @@
-language: java
-
 services:
-  - rabbitmq
-  - redis-server
-
-sudo: false
-
-cache:
-  directories:
-  - $HOME/.gradle
-
-env:
-  - TERM=dumb
+  - docker
 
 script:
-  - travis_wait ./gradlew --debug clean build -PtestLoggingStarted=true -PwikiBranch=origin/master
-
-#test
+  - ./docker.sh ./gradlew build

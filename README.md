@@ -1,54 +1,50 @@
-Spring XD
-=========
+# Osmosis
+[![Build Status](https://travis-ci.org/openstreetmap/osmosis.svg?branch=master)](https://travis-ci.org/openstreetmap/osmosis)
 
-*Spring XD* makes it easy to solve common big data problems such as data ingestion and export, real-time analytics, and batch workflow orchestration.  By building on mature, open source projects such as Spring Integration, Data and Batch, Spring XD will simplify the process of creating real-word big data solutions.  XD stands for 'eXtreme Data' or 'x' as in y=mx+b :)
+## Overview
 
-While it is possible today to build such solutions using Spring (see the [Spring Data Book][] for details and examples), Spring XD will move well beyond the framework API level by providing an out-of-the-box executable server, a pluggable module system, a high level configuration DSL, a simple model for distributing data processing instances on or off the Hadoop cluster, and more.
+Osmosis is a command line Java application for processing
+[Open Street Map](http://www.openstreetmap.org) data.
 
-You can fork the repository and/or monitor JIRA to see what is going on. As always, we consider the feedback from our broad and passionate community to be one of our greatest assets.
+The tool consists of a series of pluggable components that can be chained
+together to perform a larger operation. For example, it has components for
+reading from database and from file, components for writing to database and to
+file, components for deriving and applying change sets to data sources,
+components for sorting data, etc. It has been written so that it is easy to add
+new features without re-writing common tasks such as file or database handling.
 
-## Documentation
+The main point of entry for documentation is
+[the project wiki page](http://wiki.openstreetmap.org/wiki/Osmosis), although
+some information is included below.
 
-Look for it on the [XD wiki](https://github.com/springsource/spring-xd/wiki). [API Documentation](http://static.springsource.org/spring-xd/docs/current-SNAPSHOT/api/) (JavaDoc) is available as well. Please also visit the SpringSource.org [project website](http://www.springsource.org/spring-xd) for more information.
+## Status
 
-## How to build 
+Osmosis is in light-maintenance mode.
+[As of 2018 we’ve stopped active development](https://lists.openstreetmap.org/pipermail/osmosis-dev/2018-October/001847.html)
+and transitioned to periodic acceptance of pull requests with tests and minor version releases.
+Keep an eye on [osmosis-dev list](https://lists.openstreetmap.org/listinfo/osmosis-dev)
+for any updates.
 
-Check the documentation on how to build Spring XD [here](http://docs.spring.io/spring-xd/docs/current-SNAPSHOT/reference/html/#building-spring-xd).
+## Usage
 
-## Getting Help
+* [The project wiki page](http://wiki.openstreetmap.org/wiki/Osmosis) is the best
+place to begin for new users.
+* [Detailed Usage](./doc/detailed-usage.adoc) is the main reference for experienced users.
 
-* Get involved with the community on StackOverflow using the tag spring-xd.
+## Installation
 
-## License
+It is recommended to use a pre-built distribution archive rather than compile
+from source.  The location of the [latest builds are specified on the project
+wiki](https://wiki.openstreetmap.org/wiki/Osmosis#Latest_stable_version).
+These archives may be extracted to a location of your choice.  The bin
+sub-directory should either be added to your `PATH`, or in the case of UNIX-like
+environments the "osmosis" script may be symlinked into an existing directory
+already on the `PATH`.
 
-*Spring XD* is released under version 2.0 of the [Apache License][].
+## Development
 
-## Contributing to Spring XD
-
-Here are some ways for you to get involved 
-
-* Create [JIRA](https://jira.springsource.org/browse/XD) tickets for bugs and new features and comment and vote on the ones that you are interested in.
-* Follow the flow of developing on the [work board](https://jira.springsource.org/secure/RapidBoard.jspa?rapidView=6).
-* Github is for social coding: if you want to write code, we encourage contributions through pull requests from [forks of this repository](http://help.github.com/forking/).  If you want to contribute code this way, please familiarize yourself with the process outlined for contributing to Spring projects here: [Contributor Guidelines](https://github.com/SpringSource/spring-integration/wiki/Contributor-Guidelines).
-
-Before we accept a non-trivial patch or pull request we will need you to sign the [contributor's agreement](https://support.springsource.com/spring_committer_signup).  Signing the contributor's agreement does not grant anyone commit rights to the main repository, but it does mean that we can accept your contributions, and you will get an author credit if we do.  Active contributors might be asked to join the core team, and given the ability to merge pull requests.
+See [Development](./doc/development.md) for details.
 
 ## Issue Tracking
 
-Report issues via the [Spring XD JIRA][].
-
-## Continuous Integration
-
-* **Master**: https://build.spring.io/browse/XD-MASTER
-* **Sonar**: https://build.spring.io/browse/XD-SONAR
-
-## Metrics
-
-Source Metrics are available via Sonar at:
-
-* https://sonar.springsource.org/dashboard/index/org.springframework.xd:spring-xd
-
-
-[Spring XD JIRA]: https://jira.springsource.org/browse/XD
-[Apache License]: http://www.apache.org/licenses/LICENSE-2.0
-[Spring Data Book]: http://bit.ly/sd-book 
+See https://trac.openstreetmap.org/query?status=!closed&component=osmosis
