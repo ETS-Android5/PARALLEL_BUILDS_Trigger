@@ -1,12 +1,41 @@
 language: java
+dist: bionic
 
 jdk:
-  - oraclejdk8
+  - oraclejdk11
+
+matrix:
+  include:
+    - jdk: oraclejdk11
+      addons:
+        sonarcloud:
+          organization: "i2p"
+      before_install:
+        - sed -i "1iplugins {\n    id 'org.sonarqube' version '3.0'\n}\n" build.gradle
+    - jdk: openjdk8
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.sonar/cache/
+    - .gradle
 
 env:
-  - TERM=dumb
+  - SONAR_SCANNER_OPTS="-Xmx2048m" 
 
-before_script:
-  - mysql -e "create database petstore_test;"
-  - mysql -e "create user 'testbot'@'localhost' identified by 'petstore'";
-  - mysql -u root -e "grant all on petstore_test.* to 'testbot'@'localhost'";
+script:
+  - travis_wait 45 ./tests/scripts/travis.sh
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  irc:
+    channels:
+      - "chat.freenode.net#i2p-dev"
+    on_success: change
+    on_failure: always
